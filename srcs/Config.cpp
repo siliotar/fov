@@ -1,5 +1,5 @@
 #include "Config.hpp"
-
+#include <iostream>
 Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 {
 	std::ifstream	confFile(filePath);
@@ -30,6 +30,19 @@ Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 		_fov -= 360.0f;
 	_fov = _fov / 180.0f * M_PI;
 	_units.resize(_units.size());
+	std::vector<Point>	posVector;
+	posVector.reserve(_units.size());
+	for (size_t i = 0; i < _units.size(); ++i)
+		posVector.emplace_back(_units[i].pos);
+	std::sort(posVector.begin(), posVector.end());
+	std::vector<Point>::const_iterator	it = posVector.begin() + 1;
+	std::vector<Point>::const_iterator	prev = posVector.begin();
+	for (; it != posVector.end(); ++it)
+	{
+		if (*it == *prev)
+			throw SameCoordinatesException();
+		prev = it;
+	}
 }
 
 float	Config::_parseValue(const std::string &line, const std::string &name)
@@ -58,9 +71,6 @@ void	Config::_parsePoints(const std::string &line)
 		|| dir != "dir" || openBracket2 != '(' || comma2 != ',' || closeBracket2 != ')' \
 		|| temp.size() > 0 || !ssline.eof())
 		throw IncorrectFileException();
-	if (std::find_if(_units.begin(), _units.end(), \
-		[x1, y1](const Unit& unit) { return unit.pos.x == x1 && unit.pos.y == y1; }) != _units.end())
-		throw SameCoordinatesException();
 	_units.emplace_back(x1, y1, x2, y2);
 }
 

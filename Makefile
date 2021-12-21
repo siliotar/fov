@@ -10,10 +10,12 @@ DEPDIR = .dep/
 
 INCLUDEDIR = include/
 
-FLAGS = -Wall -Werror -Wextra --std=c++14
+FLAGS = -Wall -Werror -Wextra --std=c++14 -g
 
 SOURCEFILES =	main.cpp \
-				Config.cpp
+				Config.cpp \
+				Solve.cpp \
+				utils.cpp
 
 SOURCE = $(addprefix $(SRCDIR), $(SOURCEFILES))
 
@@ -51,7 +53,7 @@ $(NAME): $(OBJ)
 ifeq ($(UNAME_S),Darwin)
 	clang++ $(OBJ) -o $(NAME) -framework Cocoa -framework OpenGL -framework QuartzCore -framework IOKit $(LIBS)
 else
-	clang++ $(OBJ) -o $(NAME)
+	clang++ $(OBJ) -o $(NAME) -lpthread
 endif
 
 clean:

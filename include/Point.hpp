@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+
 struct Point
 {
 	Point(): x(0.0f), y(0.0f) {}

@@ -45,7 +45,7 @@ _screenWidth(1366), _screenHeight(768), _config(config), _tempUnit(0.0f), _lastF
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 
-	_fovVCount = ceilf(_config.getFov() * 180.0f / M_PI);
+	_fovVCount = ceilf(_config.getFov() * 180.0f / M_PI) + 1;
 	_vCount = _config.getUnits().size();
 	_fovVertices = new float[(_fovVCount + 2) * 2];
 	_unitsVertices = new float[_vCount * 2];
@@ -231,7 +231,7 @@ void	Visualizer::_drawScene()
 
 		for (size_t i = 1; i <= _fovVCount; ++i)
 		{
-			float	tmp = startCorner + (float) (i - 1) / _fovVCount * _config.getFov();
+			float	tmp = startCorner + (float) (i - 1) / (_fovVCount - 1) * _config.getFov();
 			_fovVertices[i * 2] = 0.5f * cos(tmp);
 			if (aspectRatio > 1.0f)
 				_fovVertices[i * 2] /= aspectRatio;
@@ -284,7 +284,6 @@ void	Visualizer::_checkResize()
 
 void	Visualizer::visualize()
 {
-	std::cout << "\n\n";
 	std::cout << "Press the right arrow to switch to the next unit.\n";
 	std::cout << "Press the left arrow to switch to the previous unit.\n";
 	while (!glfwWindowShouldClose(_window))

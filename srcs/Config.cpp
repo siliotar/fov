@@ -1,5 +1,5 @@
 #include "Config.hpp"
-#include <iostream>
+
 Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 {
 	std::ifstream	confFile(filePath);
@@ -15,6 +15,7 @@ Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 	_units.reserve(lineCount);
 	confFile.clear();
 	confFile.seekg(0, std::ios::beg);
+
 	while (std::getline(confFile, line))
 	{
 		if (line.size() == 0)
@@ -28,9 +29,10 @@ Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 	}
 	if (_fov <= 0.0f || _dist <= 0)
 		throw IncorrectFileException();
-	while (_fov > 360.0f)
-		_fov -= 360.0f;
-	_fov = _fov / 180.0f * M_PI;
+	if (_fov > 360.0f)
+		_fov = M_PI * 2;
+	else
+		_fov = _fov / 180.0f * M_PI;
 	_units.resize(_units.size());
 	std::vector<Point>	posVector;
 	posVector.reserve(_units.size());

@@ -54,6 +54,7 @@ void	calculateResult(const Config &conf)
 		workers[i] = std::thread(calculateResultThread, conf, i, result.data());
 	for (int i = 0; i < THREAD_COUNT; ++i)
 		workers[i].join();
+	std::ofstream	output("result");
 	for (size_t i = 0; i < unitsSize; ++i)
-		std::cout << "Unit" << i + 1 << ": see " << result[i] << " other units\n";
+		output << "Unit" << i + 1 << ": see " << result[i] << " other units\n";
 }

@@ -55,5 +55,5 @@ void	calculateResult(const Config &conf)
 	for (int i = 0; i < THREAD_COUNT; ++i)
 		workers[i].join();
 	for (size_t i = 0; i < unitsSize; ++i)
-		std::cout << "Unit" << i + 1 << ": see " << result[i] << "\n";
+		std::cout << "Unit" << i + 1 << ": see " << result[i] << " other units\n";
 }

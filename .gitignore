@@ -33,6 +33,6 @@
 fov
 
 # Other
-examples
 .dep
 .vscode
+rand.cpp

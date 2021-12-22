@@ -9,3 +9,17 @@ float	getVecLength(const Point &point)
 {
 	return sqrtf(point.x * point.x + point.y * point.y);
 }
+
+std::string		readFile(const std::string &filePath)
+{
+	std::string		line;
+	std::ifstream	f(filePath.c_str());
+	std::stringstream	ss;
+	if (f.is_open())
+	{
+		while (getline(f, line))
+			ss << line << "\n";
+		f.close();
+	}
+	return ss.str();
+}

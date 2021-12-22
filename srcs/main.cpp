@@ -1,25 +1,37 @@
 #include "Config.hpp"
 #include "Solve.hpp"
 #include <iostream>
-#include <chrono>
+#include "Visualizer.hpp"
+
+int	returnErorr(const std::string &msg)
+{
+	std::cout << msg << std::endl;
+	std::cout << "Usage: fov [-v] configuration_file\n";
+	std::cout << "-v\tVisualize\n";
+	return EXIT_FAILURE;
+}
 
 int main(int argc, const char **argv)
 {
-	using namespace std::literals::chrono_literals;
+	bool	visualize = false;
 	if (argc < 2)
-	{
-		std::cout << "Not enough arguments!" << std::endl;
-		return EXIT_FAILURE;
-	}
+		return returnErorr("Not enough arguments!");
+	else if (argc == 3 && std::string(argv[1]) == "-v")
+		visualize = true;
+	else if (argc >= 3)
+		return returnErorr("Too many arguments!");
 	try
 	{
-		Config	conf(argv[1]);
+		Config	conf(argv[1 + visualize]);
 		calculateResult(conf);
+		if (visualize)
+		{
+			Visualizer	v(conf);
+			v.visualize();
+		}
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	// for (size_t i = 0; i < 15000; ++i)
-	// 	std::cout << "pos (" << i << ", -1) dir (0.707, 0.707)" << std::endl;
 }

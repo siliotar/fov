@@ -15,15 +15,16 @@ FLAGS = -Wall -Werror -Wextra --std=c++14 -g
 SOURCEFILES =	main.cpp \
 				Config.cpp \
 				Solve.cpp \
-				utils.cpp
+				utils.cpp \
+				Visualizer.cpp
 
-SOURCE = $(addprefix $(SRCDIR), $(SOURCEFILES))
+SOURCE = $(addprefix $(SRCDIR), $(SOURCEFILES)) libs/glad/src/glad.c
 
-OBJ = $(addprefix $(OBJDIR), $(SOURCEFILES:.cpp=.o))
+OBJ = $(addprefix $(OBJDIR), $(SOURCEFILES:.cpp=.o)) $(OBJDIR)glad.o
 
-DEP = $(addprefix $(DEPDIR), $(SOURCEFILES:.cpp=.d))
+DEP = $(addprefix $(DEPDIR), $(SOURCEFILES:.cpp=.d)) $(DEPDIR)glad.d
 
-INCLUDES = -I $(INCLUDEDIR)
+INCLUDES = -I $(INCLUDEDIR) -I libs/glfw/include -I libs/glad/include
 
 ifeq ($(UNAME_S),Darwin)
 LIBS = -L ./libs/glfw-3.3.5/src/ -lglfw3 -lpthread -ldl -lm -L ./libs/
@@ -50,10 +51,11 @@ $(DEPDIR):
 $(OBJ): | $(OBJDIR) $(DEPDIR)
 
 $(NAME): $(OBJ)
+	# cd libs/glfw && cmake . && make --silent
 ifeq ($(UNAME_S),Darwin)
 	clang++ $(OBJ) -o $(NAME) -framework Cocoa -framework OpenGL -framework QuartzCore -framework IOKit $(LIBS)
 else
-	clang++ $(OBJ) -o $(NAME) -lpthread
+	clang++ $(OBJ) -o $(NAME) $(LIBS)
 endif
 
 clean:

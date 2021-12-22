@@ -7,7 +7,7 @@ Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 	std::string	line;
 
 	if (!confFile.is_open())
-		throw WrongFileException();
+		throw FileOpenException();
 	size_t	lineCount = 0;
 	while (std::getline(confFile, line))
 		if (line.size() != 0)
@@ -21,14 +21,24 @@ Config::Config(const std::string &filePath) : _fov(-1.0f), _dist(-1.0f)
 		if (line.size() == 0)
 			continue ;
 		if (line.find("fov") != std::string::npos)
+		{
+			if (_fov >= 0.0f)
+				throw MultipleFovDeclaration();
 			_fov = _parseValue(line, "fov");
+		}
 		else if (line.find("distance") != std::string::npos)
+		{
+			if (_dist >= 0.0f)
+				throw MultipleDistanceDeclaration();
 			_dist = _parseValue(line, "distance");
+		}
 		else
 			_parsePoints(line);
 	}
 	if (_fov <= 0.0f || _dist <= 0)
 		throw IncorrectFileException();
+	if (_units.size() == 0)
+		throw ZeroUnitsException();
 	if (_fov > 360.0f)
 		_fov = M_PI * 2;
 	else
@@ -66,7 +76,7 @@ void	Config::_parsePoints(const std::string &line)
 	std::istringstream	ssline(line);
 	std::string	pos;
 	std::string	dir, temp;
-	char	openBracket1, comma1, closeBracket1, openBracket2, comma2, closeBracket2;
+	char	openBracket1 = 0, comma1 = 0, closeBracket1 = 0, openBracket2 = 0, comma2 = 0, closeBracket2 = 0;
 	float	xPos, yPos, xDir, yDir;
 	ssline >> pos >> openBracket1 >> xPos >> comma1 >> yPos >> closeBracket1;
 	ssline >> dir >> openBracket2 >> xDir >> comma2 >> yDir >> closeBracket2;

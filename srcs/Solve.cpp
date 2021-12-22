@@ -56,5 +56,5 @@ void	calculateResult(const Config &conf)
 		workers[i].join();
 	std::ofstream	output("result");
 	for (size_t i = 0; i < unitsSize; ++i)
-		output << "Unit" << i + 1 << ": see " << result[i] << " other units\n";
+		output << "Unit" << i + 1 << ": sees " << result[i] << " other units\n";
 }

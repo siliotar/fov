@@ -27,12 +27,26 @@ public:
 		virtual ~SameCoordinatesException() {}
 		virtual const char* what() const throw () { return "Two units have the same coorinates"; }
 	};
-	class WrongFileException : public std::exception
+	class MultipleFovDeclaration : public std::exception
 	{
 	public:
-		WrongFileException() {}
-		virtual ~WrongFileException() {}
-		virtual const char* what() const throw () { return "Wrong config file"; }
+		MultipleFovDeclaration() {}
+		virtual ~MultipleFovDeclaration() {}
+		virtual const char* what() const throw () { return "More than one fov declaration"; }
+	};
+	class MultipleDistanceDeclaration : public std::exception
+	{
+	public:
+		MultipleDistanceDeclaration() {}
+		virtual ~MultipleDistanceDeclaration() {}
+		virtual const char* what() const throw () { return "More than one distance declaration"; }
+	};
+	class FileOpenException : public std::exception
+	{
+	public:
+		FileOpenException() {}
+		virtual ~FileOpenException() {}
+		virtual const char* what() const throw () { return "Unable to open configuration file"; }
 	};
 	class IncorrectFileException : public std::exception
 	{
@@ -40,6 +54,13 @@ public:
 		IncorrectFileException() {}
 		virtual ~IncorrectFileException() {}
 		virtual const char* what() const throw () { return "Incorrect config file"; }
+	};
+	class ZeroUnitsException : public std::exception
+	{
+	public:
+		ZeroUnitsException() {}
+		virtual ~ZeroUnitsException() {}
+		virtual const char* what() const throw () { return "Not enough units"; }
 	};
 	float	getFov() const;
 	float	getDistance() const;

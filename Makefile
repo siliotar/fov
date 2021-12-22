@@ -10,7 +10,7 @@ DEPDIR = .dep/
 
 INCLUDEDIR = include/
 
-FLAGS = -Wall -Werror -Wextra --std=c++14 -g
+FLAGS = -Wall -Werror -Wextra --std=c++14
 
 SOURCEFILES =	main.cpp \
 				Config.cpp \
@@ -51,7 +51,7 @@ $(DEPDIR):
 $(OBJ): | $(OBJDIR) $(DEPDIR)
 
 $(NAME): $(OBJ)
-	# cd libs/glfw && cmake . && make --silent
+	cd libs/glfw && cmake . && make --silent
 ifeq ($(UNAME_S),Darwin)
 	clang++ $(OBJ) -o $(NAME) -framework Cocoa -framework OpenGL -framework QuartzCore -framework IOKit $(LIBS)
 else
